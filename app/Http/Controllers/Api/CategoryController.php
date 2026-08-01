@@ -26,7 +26,7 @@ class CategoryController extends Controller
 
     public function update(StoreCategoryRequest $request, Category $category)
     {
-        $this->authorizeOwner($category, $request);
+        $this->authorize('update', $category);
 
         $category->update($request->validated());
 
@@ -35,7 +35,7 @@ class CategoryController extends Controller
 
     public function destroy(Request $request, Category $category)
     {
-        $this->authorizeOwner($category, $request);
+        $this->authorize('delete', $category);
 
         $category->delete();
 

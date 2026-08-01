@@ -38,7 +38,7 @@ class TransactionController extends Controller
 
     public function update(StoreTransactionRequest $request, Transaction $transaction)
     {
-        abort_if($transaction->user_id !== $request->user()->id, 403);
+        $this->authorize('update', $transaction);
 
         $transaction->update($request->validated());
 
@@ -47,9 +47,9 @@ class TransactionController extends Controller
 
     public function destroy(Request $request, Transaction $transaction)
     {
-        abort_if($transaction->user_id !== $request->user()->id, 403);
+        $this->authorize('delete', $transaction);
 
-        $transaction->delete(); 
+        $transaction->delete();
 
         return response()->noContent();
     }
