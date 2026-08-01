@@ -30,3 +30,19 @@ it('nao registra com email duplicado', function () {
 
     $response->assertStatus(422);
 });
+
+it('bloqueia apos muitas tentativas de login', function () {
+    for ($i = 0; $i < 6; $i++) {
+        $this->postJson('/api/login', [
+            'email' => 'errado@teste.com',
+            'password' => 'errada',
+        ]);
+    }
+
+    $response = $this->postJson('/api/login', [
+        'email' => 'errado@teste.com',
+        'password' => 'errada',
+    ]);
+
+    $response->assertStatus(429);
+});
