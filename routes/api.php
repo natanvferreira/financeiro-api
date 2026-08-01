@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\SummaryController;
 use App\Http\Controllers\Api\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::apiResource('categories', CategoryController::class)->except(['show']);
     Route::apiResource('transactions', TransactionController::class)->except(['show']);
+    Route::get('/summary', [SummaryController::class, 'index']);
 });
