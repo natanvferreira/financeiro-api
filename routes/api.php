@@ -1,24 +1,23 @@
+
 <?php
 
-use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\TransactionController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
-return Application::configure(basePath: dirname(__DIR__))
-    ->withRouting(
-        web: __DIR__ . '/../routes/web.php',
-        api: __DIR__ . '/../routes/api.php',
-        commands: __DIR__ . '/../routes/console.php',
-        health: '/up',
-    )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->render(function (AuthenticationException $e, $request) {
-            return response()->json(['message' => 'Não autenticado.'], 401);
-        });
-    })->create();
-    
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('categories', CategoryController::class)->except(['show']);
+    Route::apiResource('transactions', TransactionController::class)->except(['show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::apiResource('categories', CategoryController::class)->except(['show']);
+    Route::apiResource('transactions', TransactionController::class)->except(['show']);
+});
