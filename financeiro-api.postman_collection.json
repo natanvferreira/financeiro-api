@@ -1,0 +1,428 @@
+{
+    "info": {
+        "name": "Financeiro API",
+        "description": "Coleção de rotas da API de controle financeiro pessoal (projeto de treino Laravel).",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000/api"
+        },
+        {
+            "key": "token",
+            "value": ""
+        }
+    ],
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Register",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Natan\",\n    \"email\": \"natan@teste.com\",\n    \"password\": \"senha123\",\n    \"password_confirmation\": \"senha123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/register",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "register"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"natan@teste.com\",\n    \"password\": \"senha123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logout"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Categories",
+            "item": [
+                {
+                    "name": "List categories",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create category",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Alimentação\",\n    \"type\": \"expense\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/categories",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update category",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Alimentação e mercado\",\n    \"type\": \"expense\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/categories/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete category",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/categories/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "categories",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transactions",
+            "item": [
+                {
+                    "name": "List transactions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transactions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "List transactions (filtered)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transactions?category_id=1&from=2026-08-01&to=2026-08-31",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "category_id",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "from",
+                                    "value": "2026-08-01"
+                                },
+                                {
+                                    "key": "to",
+                                    "value": "2026-08-31"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create transaction",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"description\": \"Supermercado\",\n    \"amount\": 350.50,\n    \"date\": \"2026-08-01\",\n    \"category_id\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/transactions",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update transaction",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"description\": \"Supermercado do mes\",\n    \"amount\": 400.00,\n    \"date\": \"2026-08-02\",\n    \"category_id\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/transactions/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions",
+                                "1"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete transaction",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transactions/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Summary",
+            "item": [
+                {
+                    "name": "Monthly summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/summary?month=2026-08",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "summary"
+                            ],
+                            "query": [
+                                {
+                                    "key": "month",
+                                    "value": "2026-08"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
