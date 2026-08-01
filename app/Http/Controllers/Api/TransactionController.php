@@ -26,7 +26,7 @@ class TransactionController extends Controller
             $query->where('date', '<=', $request->to);
         }
 
-        return TransactionResource::collection($query->latest('date')->get());
+        return TransactionResource::collection($query->latest('date')->paginate(15));
     }
 
     public function store(StoreTransactionRequest $request)

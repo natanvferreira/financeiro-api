@@ -13,7 +13,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         return CategoryResource::collection(
-            $request->user()->categories()->get()
+            $request->user()->categories()->paginate(15)
         );
     }
 
@@ -40,10 +40,5 @@ class CategoryController extends Controller
         $category->delete();
 
         return response()->noContent();
-    }
-
-    private function authorizeOwner(Category $category, Request $request): void
-    {
-        abort_if($category->user_id !== $request->user()->id, 403);
     }
 }

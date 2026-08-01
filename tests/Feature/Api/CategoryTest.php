@@ -3,19 +3,16 @@
 use App\Models\User;
 use App\Models\Category;
 
-it('lista apenas as categorias do usuario autenticado', function () {
+it('pagina a listagem de categorias', function () {
     $user = User::factory()->create();
-    $outroUser = User::factory()->create();
-
-    Category::factory()->create(['user_id' => $user->id, 'name' => 'Minha categoria']);
-    Category::factory()->create(['user_id' => $outroUser->id, 'name' => 'Categoria de outro usuario']);
+    Category::factory()->count(20)->create(['user_id' => $user->id]);
 
     $response = $this->actingAs($user, 'sanctum')
         ->getJson('/api/categories');
 
     $response->assertStatus(200)
-        ->assertJsonCount(1, 'data')
-        ->assertJsonFragment(['name' => 'Minha categoria']);
+        ->assertJsonCount(15, 'data')
+        ->assertJsonPath('meta.total', 20);
 });
 
 it('cria uma categoria para o usuario autenticado', function () {
