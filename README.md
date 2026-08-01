@@ -8,6 +8,7 @@ PHP 8.3 + Laravel atual (vindo de uma base anterior em PHP 7.2 / Laravel 7).
 - PHP 8.3
 - Laravel (última versão estável)
 - Laravel Sanctum (autenticação via token)
+- Pest 4 (testes automatizados)
 - MySQL 8 (rodando em Docker)
 - Composer
 
@@ -36,17 +37,24 @@ DB_USERNAME=root
 DB_PASSWORD=root
 ```
 
-Roda as migrations:
+Roda as migrations e popula com dados de teste:
 
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
 ```
+
+Isso cria um usuário de teste (`natan@teste.com` / `senha123`) já com
+categorias e transações de exemplo.
 
 Sobe o servidor:
 
 ```bash
 php artisan serve
 ```
+
+> **Atenção:** evite rodar `php artisan optimize` em ambiente de
+> desenvolvimento. Ele cacheia config/rotas e faz mudanças no `.env` ou nas
+> rotas pararem de ter efeito até rodar `php artisan optimize:clear`.
 
 ## Autenticação
 
@@ -62,6 +70,9 @@ Também é necessário mandar, em toda requisição:
 ```
 Accept: application/json
 ```
+
+As rotas de `register` e `login` têm **rate limiting** (máximo 6 tentativas
+por minuto, por IP) para mitigar força bruta e spam de cadastro.
 
 ### Registro
 
@@ -104,6 +115,8 @@ Invalida o token atual.
 
 ## Endpoints
 
+Listagens são **paginadas** (15 itens por página, parâmetro `?page=N`).
+
 ### Categorias
 
 ```
@@ -123,6 +136,9 @@ Body de criação/edição:
 ```
 
 `type` aceita `income` ou `expense`.
+
+Edição e exclusão só são permitidas para o dono do registro (ver
+[Autorização](#autorização)).
 
 ### Transações
 
@@ -173,7 +189,7 @@ Se `month` não for informado, usa o mês atual. Retorna:
 - **Migrations** — definem a estrutura das tabelas (`categories`, `transactions`),
   incluindo chaves estrangeiras para `users`.
 - **Models** — `Category` e `Transaction`, com relacionamentos Eloquent
-  (`belongsTo`/`hasMany`) e `$fillable` para mass assignment seguro.
+  (`belongsTo`/`hasMany`), `HasFactory` e `$fillable` para mass assignment seguro.
 - **Form Requests** — `StoreCategoryRequest` e `StoreTransactionRequest`
   centralizam as regras de validação, fora dos controllers.
 - **API Resources** — `CategoryResource` e `TransactionResource` controlam
@@ -183,6 +199,46 @@ Se `month` não for informado, usa o mês atual. Retorna:
 - **bootstrap/app.php** — configurado para responder erros de autenticação
   sempre em JSON (evita o comportamento padrão de redirecionar para uma
   rota `login` inexistente em uma API pura).
+
+### Autorização
+
+`CategoryPolicy` e `TransactionPolicy` centralizam a regra de que só o dono
+do registro pode editá-lo ou excluí-lo. Os controllers chamam
+`$this->authorize('update', $model)` / `$this->authorize('delete', $model)`,
+que retornam automaticamente `403` quando a regra falha. O trait
+`AuthorizesRequests` precisa estar presente em `app/Http/Controllers/Controller.php`
+para que `$this->authorize()` funcione.
+
+### Seeders
+
+`DatabaseSeeder` chama `CategorySeeder` e `TransactionSeeder`, nessa ordem,
+para popular um usuário de teste com dados de exemplo. Use
+`php artisan migrate:fresh --seed` para recriar o banco do zero já populado.
+
+## Testes
+
+O projeto usa **Pest 4**. Cobertura atual:
+
+- Registro e duplicidade de e-mail
+- Rate limiting em login
+- Listagem de categorias/transações restrita ao usuário autenticado
+- Criação de categoria/transação
+- Bloqueio de acesso a registros de outro usuário (via Policy)
+- Validação de categoria inexistente ao criar transação
+- Filtro de transações por categoria
+- Paginação de categorias
+
+Rodar toda a suíte:
+
+```bash
+php artisan test
+```
+
+Rodar um arquivo específico:
+
+```bash
+php artisan test --filter=CategoryTest
+```
 
 ## Ferramentas de desenvolvimento
 
